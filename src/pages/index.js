@@ -6,28 +6,28 @@ import CountdownTimer from "../component/countdown";
 function Index() {
     const [count, setCount] = useState(0);
     const [limit] = useState(3);
-    const [canLogin, setCanLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
 
     useEffect(() => {
-        const canLoginAt = localStorage.getItem("canLoginAt");
-        if (canLoginAt) {
+        const time = localStorage.getItem("time");
+        if (time) {
             const dateNow = new Date();
-            const dateCanLogin = new Date(canLoginAt);
+            const dateisLogin = new Date(time);
 
-            if (dateNow > dateCanLogin) {
-                setCanLogin(true);
+            if (dateNow > dateisLogin) {
+                setIsLogin(true);
             } else {
-                setCanLogin(false);
+                setIsLogin(false);
             }
         } else {
-            setCanLogin(true);
+            setIsLogin(true);
         }
     }, []);
 
     useEffect(() => {
         if (count >= limit) {
             setRestrictTime();
-            setCanLogin(false);
+            setIsLogin(false);
         }
     }, [count, limit]);
 
@@ -35,11 +35,11 @@ function Index() {
         const t = new Date();
         t.setSeconds(t.getSeconds() + 30);
 
-        localStorage.setItem("canLoginAt", t);
+        localStorage.setItem("time", t);
     };
 
     const removeRestrictTime = () => {
-        localStorage.setItem("canLoginAt", "");
+        localStorage.setItem("time", "");
     };
 
     const validateLogin = (val) => {
@@ -54,7 +54,7 @@ function Index() {
         <Container className="py-5">
             <Row>
                 <Col md="12">
-                    {canLogin ? (
+                    {isLogin ? (
                         <LoginForm validateLogin={validateLogin} />
                     ) : (
                         <CountdownTimer />
